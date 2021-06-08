@@ -268,6 +268,10 @@ if __name__ == "__main__":
 	trans_init = p2p.compute_transformation(srcCld, trgCld, o3d.utility.Vector2iVector(corr))
 	print("Transformation matrix: \n", trans_init)
 
+	np.save('transLC.npy', trans_init)
+	print("Transformation matrix saved.")
+
+
 	if args.viz3d:
 		# o3d.visualization.draw_geometries(srcSph)
 		# o3d.visualization.draw_geometries(trgSph)

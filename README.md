@@ -20,3 +20,5 @@
 	1. `python genG2o.py data5/poses.txt`  
 3. Adding loop closure edges `loop_pairs.txt` to generated odometry edges `noise.g2o` to output `noise_lc.g2o`. Also optimizing odometry and loop closure edges stored in `noise_lc.g2o` to output `opt.g2o`.  
 	1. `python optimizePose.py data5/noise.g2o data5/loop_pairs.txt`  
+4. Converting RoRD transformations to Right-handed and odom frame transformation:
+	1. `python cordTrans.py ../demo/transLC.npy`   
