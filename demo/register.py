@@ -60,6 +60,11 @@ parser.add_argument(
 )
 
 parser.add_argument(
+	'--save_trans', action='store_true',
+	help='Saves final transformation in .npy format'
+)
+
+parser.add_argument(
 	'--camera_file', type=str, default='../configs/camera.txt',
 	help='path to the camera intrinsics file. In order: focal_x, focal_y, center_x, center_y, scaling_factor.'
 )
@@ -268,8 +273,9 @@ if __name__ == "__main__":
 	trans_init = p2p.compute_transformation(srcCld, trgCld, o3d.utility.Vector2iVector(corr))
 	print("Transformation matrix: \n", trans_init)
 
-	np.save('transLC.npy', trans_init)
-	print("Transformation matrix saved.")
+	if args.save_trans:
+		np.save('transLC.npy', trans_init)
+		print("Transformation matrix saved.")
 
 
 	if args.viz3d:

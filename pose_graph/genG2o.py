@@ -78,12 +78,7 @@ def addNoise(X, Y, THETA):
 			# xNoise = np.random.normal(0, 0.08); yNoise = np.random.normal(0, 0.08); tNoise = np.random.normal(0, 0.002)
 			# xNoise = 0.005; yNoise = 0.005; tNoise = -0.0005
 			# xNoise = 0.01; yNoise = 0.01; tNoise = 0.0007
-			xNoise = 0; yNoise = 0; tNoise = 0.000015
-
-		# if(i > 359 and i < 454):
-		# 	xNoise = 0; yNoise = 0; tNoise = 0.0008
-		# else:
-		# 	xNoise = 0; yNoise = 0; tNoise = 0
+			xNoise = 0; yNoise = 0; tNoise = 0.00015
 
 
 		del_xN = del_x + xNoise; del_yN = del_y + yNoise; del_thetaN = del_theta + tNoise

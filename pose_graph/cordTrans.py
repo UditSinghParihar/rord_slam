@@ -24,22 +24,23 @@ def right2left():
 	return TR2L
 
 
-def baseWrtCam():
-	# Returns: Base wrt Camera
+def camWrtBase():
+	# Returns: Camera wrt Base
 
-	TCB = np.identity(4)
+	TBC = np.identity(4)
 
-	qx, qy, qz, qw = 0.557, 0.662, -0.383, -0.323
-	tx, ty, tz = -7.195, 0.849, 1.113
+	# rosrun tf tf_echo base_link camera_link
+	qx, qy, qz, qw = 0.000, 0.259, 0.000, 0.966
+	tx, ty, tz = 0.064, -0.065, 1.094
 
-	RCB = R.from_quat([qx, qy, qz, qw]).as_dcm()
+	RBC = R.from_quat([qx, qy, qz, qw]).as_dcm()
 
-	TCB[0:3, 0:3] = RCB
-	TCB[0, 3] = tx
-	TCB[1, 3] = ty
-	TCB[2, 3] = tz
+	TBC[0:3, 0:3] = RBC
+	TBC[0, 3] = tx
+	TBC[1, 3] = ty
+	TBC[2, 3] = tz
 
-	return TCB
+	return TBC
 
 
 def leftTransToRight(T12L):
@@ -55,7 +56,10 @@ def leftTransToRight(T12L):
 def printEdge(T):
 	# T = np.linalg.inv(T)
 	Rot = R.from_dcm(T[0:3, 0:3])
-	euler = Rot.as_euler('zxy', degrees=True)
+	euler = Rot.as_euler('xyz', degrees=True)
+	print("{:.2f} {:.2f} {:.2f}".format(euler[0], euler[1], euler[2]))
+	print(T)
+	print('---')
 
 	print(T[0, 3], T[0, 1], euler[2])
 
@@ -65,12 +69,10 @@ if __name__ == '__main__':
 	# C2 wrt C1 in Left hand frame
 	TC1C2L = np.load(argv[1])
 
-	TCB = baseWrtCam()
+	TC1C2R = leftTransToRight(TC1C2L)
 
 	# Camera wrt Base in Right hand frame
-	TBC = np.linalg.inv(TCB)
-
-	TC1C2R = leftTransToRight(TC1C2L)
+	TBC = camWrtBase()
 
 	# B2 wrt B1 in Right hand frame
 	TB1B2R = TBC @ TC1C2R @ np.linalg.inv(TBC)
