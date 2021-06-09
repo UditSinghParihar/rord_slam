@@ -17,7 +17,7 @@
 2. Converting RoRD transformations (in camera frame and in left handed system) to loop closure transformations (in odom frame and in right handed system):  
 	1. Getting static transform from ros, `Tbase_camera` or `Camera wrt Base link`
 		1. `rosrun tf tf_echo base_link camera_link`    
-	2. `python cordTrans.py ../demo/transLC.npy`  
+	2. `python cordTrans.py --static_trans ../configs/camWrtBase.txt --rord_trans ../demo/transLC.npy`  
 	3. Derivation of how transformations in [`cordTrans.py`](pose_graph/cordTrans.py) are dervied can be found [here](https://drive.google.com/file/d/1UfLmfj4JtnokyQDI0k9mx3KbO0Xsvegk/view?usp=sharing).  
 
 ### Optimizing pose graph  
