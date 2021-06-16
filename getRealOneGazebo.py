@@ -260,4 +260,4 @@ if __name__ == '__main__':
 	warpImg, homographyMat = getTopImage(rgbFile, depthFile)
 
 	# cv2.imwrite('top1000img.png', warpImg)
-	# np.save('topH.npy', homographyMat)
+	np.save('topH2.npy', homographyMat)

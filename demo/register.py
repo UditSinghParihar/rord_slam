@@ -79,7 +79,13 @@ parser.add_argument(
 	help='Homography matrix for generating orthographic view.'
 )
 
+parser.add_argument(
+	'--H2', type=str, required = False,
+	help='Homography matrix for generating orthographic view for second image, if not given, then it would same as first homography.'
+)
+
 args = parser.parse_args()
+
 
 if args.model_ens: # Change default paths accordingly for ensemble
 	model1_ens = '../../models/rord.pth'
@@ -227,7 +233,10 @@ if __name__ == "__main__":
 	# H_name_trg = os.path.splitext(rgb_name_trg)[0] + '.npy'
 	# trgH = os.path.join(os.path.dirname(args.rgb2), H_name_trg)
 	srcH = args.H
-	trgH = args.H
+	if args.H2 == None:
+		trgH = args.H
+	else:
+		trgH = args.H2
 
 	use_cuda = torch.cuda.is_available()
 	device = torch.device('cuda:0' if use_cuda else 'cpu')
