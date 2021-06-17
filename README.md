@@ -13,8 +13,8 @@
 1. Inferring on gazebo dataset in orthographic view:    
 		1. `cd demo`  
 		2. `python register.py --rgb1 <img1.jpg>  --rgb2 <img2.jpg>  --depth1 <depth1.npy>  --depth2 <depth2.npy>  --camera_file ../configs/camera_gazebo.txt  --H ../configs/topH.npy  --model_rord ../models/rord.pth --viz3d --save_trans`  
-		3. If homography is different for the two images, then use `--H` and `--H2` flags:    
-			1. `python register.py --H <first_homography.npy> --H2 <second_homography.npy>`    
+		3. If homography is different for the two images, then use `--H` and `--H2` flags:  
+		`python register.py --H <first_homography.npy> --H2 <second_homography.npy>`     
 
 2. Converting RoRD transformations (in camera frame and in left handed system) to loop closure transformations (in odom frame and in right handed system):  
 	1. Getting static transform from ros, `Tbase_camera` or `Camera wrt Base link`
