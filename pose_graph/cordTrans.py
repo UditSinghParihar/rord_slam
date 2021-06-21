@@ -46,7 +46,15 @@ def readStaticTrans(static_trans):
 
 
 def right2left():
-	# Returns: Right wrt left = TL_R = TR2L
+	"""
+	Returns: Right wrt left = TL_R = TR2L
+
+	LHS -> Ry(-90) -> Rx(90) -> RHS
+
+	TL_R = Ry(-90) Rx(90)
+	
+	"""
+
 
 	thetaX = math.radians(90)
 	thetaY = math.radians(-90)
