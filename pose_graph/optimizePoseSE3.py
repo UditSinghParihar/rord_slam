@@ -1,14 +1,17 @@
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 from sys import argv, exit
 import math
 import numpy as np
 import os
 
 
-def draw(X, Y, THETA):
-	ax = plt.subplot(111)
-	ax.plot(X, Y, 'ro')
-	ax.plot(X, Y, 'k-')
+def draw(X, Y, Z):
+	fig = plt.figure()
+	ax = plt.axes(projection='3d')
+
+	# ax.plot3D(X, Y, Z, 'k-')
+	ax.scatter3D(X, Y, Z, c=Z, cmap='Greens')
 
 	ax.set_aspect('equal', 'datalim')
 	ax.margins(0.1)
@@ -16,21 +19,20 @@ def draw(X, Y, THETA):
 	plt.show()
 
 
-# def drawTheta(X, Y, THETA):
-# 	ax = plt.subplot(111)
+def drawTwo(X, Y, Z, X2, Y2, Z2):
+	fig = plt.figure()
+	ax = plt.axes(projection='3d')
 
-# 	for i in range(len(THETA)):
-# 		x2 = math.cos(THETA[i]) + X[i]
-# 		y2 = math.sin(THETA[i]) + Y[i]
-# 		plt.plot([X[i], x2], [Y[i], y2], 'm->')
+	# ax.plot3D(X, Y, Z, 'k-')
+	ax.scatter3D(X, Y, Z, c=Z, cmap='Greens')
 
-# 	ax.plot(X, Y, 'ro')
-# 	# ax.plot(X, Y, 'k-')
+	# ax.plot3D(X2, Y2, Z2, 'k-')
+	ax.scatter3D(X2, Y2, Z2, c=Z2, cmap='Reds');
 
-# 	ax.set_aspect('equal', 'datalim')
-# 	ax.margins(0.1)
-	
-# 	plt.show()
+	ax.set_aspect('equal', 'datalim')
+	ax.margins(0.1)
+
+	plt.show()
 
 
 def drawLC(X, Y, THETA, srcs, trgs):
@@ -55,16 +57,25 @@ def readG2o(fileName):
 
 	X = []
 	Y = []
-	THETA = []
+	Z = []
+	Qx = []
+	Qy = []
+	Qz = []
+	Qw = []
 
 	for line in A:
-		if "VERTEX_SE2" in line:
-			(ver, ind, x, y, theta) = line.split(' ')
+		if "VERTEX_SE3:QUAT" in line:
+			(ver, ind, x, y, z, qx, qy, qz, qw) = line.split(' ')
+
 			X.append(float(x))
 			Y.append(float(y))
-			THETA.append(float(theta.rstrip('\n')))
+			Z.append(float(z))
+			Qx.append(float(qx))
+			Qy.append(float(qy))
+			Qz.append(float(qz))
+			Qw.append(float(qw.rstrip('\n')))
 
-	return (X, Y, THETA)
+	return (X, Y, Z, Qx, Qy, Qz, Qw)
 
 
 def readLC(filename):
@@ -134,8 +145,9 @@ def optimize():
 if __name__ == '__main__':
 	dirc = os.path.dirname(argv[1])
 
-	X, Y, THETA = readG2o(argv[1])
-	# draw(X, Y, THETA)
+	X, Y, Z, Qx, Qy, Qz, Qw = readG2o(argv[1])
+	draw(X, Y, Z)
+	exit(1)
 
 	src, trg, trans = readLC(argv[2])
 	drawLC(X, Y, THETA, src, trg)

@@ -23,6 +23,10 @@ parser.add_argument(
 parser.add_argument(
 	'--rord_trans', type=str, default='../demo/transLC.npy', help='Numpy matrix of transformation output of RoRD.')
 
+parser.add_argument(
+	'--se3', action='store_true', help=''
+)
+
 args = parser.parse_args()
 
 
@@ -108,6 +112,20 @@ def printEdge(T):
 	print(T[0, 3], T[0, 1], euler[2])
 
 
+def printEdgeSE3(T):
+	dx, dy, dz = T[0, 3], T[1, 3], T[2, 3]
+	dqx, dqy, dqz, dqw = list(R.from_dcm(T[0:3, 0:3]).as_quat())
+
+	print(dx, dy, dz, dqx, dqy, dqz, dqw)
+	# Rot = R.from_dcm(T[0:3, 0:3])
+	# euler = Rot.as_euler('xyz', degrees=True)
+	# print("{:.2f} {:.2f} {:.2f}".format(euler[0], euler[1], euler[2]))
+	# print(T)
+	# print('---')
+
+	# print(T[0, 3], T[0, 1], euler[2])
+
+
 
 if __name__ == '__main__':
 	# C2 wrt C1 in Left hand frame
@@ -121,4 +139,7 @@ if __name__ == '__main__':
 	# B2 wrt B1 in Right hand frame
 	TB1B2R = TBC @ TC1C2R @ np.linalg.inv(TBC)
 
-	printEdge(TB1B2R)
+	if args.se3:
+		printEdgeSE3(TB1B2R)
+	else:
+		printEdge(TB1B2R)

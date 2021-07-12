@@ -116,6 +116,7 @@ def readDepth(depthFile):
 
 	return np.asarray(depth)
 
+
 def readCamera(camera):
 	with open (camera, "rt") as file:
 		contents = file.read().split()
@@ -128,9 +129,10 @@ def readCamera(camera):
 
 	return focalX, focalY, centerX, centerY, scalingFactor
 
+
 def getPointCloud(rgbFile, depthFile, pts):
-	# thresh = 15.0
-	thresh = 5.6
+	thresh = 15.0
+	# thresh = 5.6
 
 
 	# depth = readDepth(depthFile)
@@ -170,6 +172,8 @@ def getPointCloud(rgbFile, depthFile, pts):
 	pcd = o3d.geometry.PointCloud()
 	pcd.points = o3d.utility.Vector3dVector(points)
 	pcd.colors = o3d.utility.Vector3dVector(colors/255)
+
+	# pcd.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
 
 	return pcd, corIdx, corPts
 
@@ -280,10 +284,16 @@ if __name__ == "__main__":
 
 	p2p = o3d.registration.TransformationEstimationPointToPoint()
 	trans_init = p2p.compute_transformation(srcCld, trgCld, o3d.utility.Vector2iVector(corr))
+
+	# trans_init = o3d.registration.registration_colored_icp(srcCld, trgCld, 0.02, trans_init,
+	# 		o3d.registration.ICPConvergenceCriteria(relative_fitness=1e-6,
+	# 												relative_rmse=1e-6,
+	# 												max_iteration=30)).transformation
+
 	print("Transformation matrix: \n", trans_init)
 
 	if args.save_trans:
-		np.save('transLC.npy', trans_init)
+		np.save('../data/drone1/transLC941_1877.npy', trans_init)
 		print("Transformation matrix saved.")
 
 

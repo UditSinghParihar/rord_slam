@@ -7,7 +7,7 @@
 
 ### Generating top view  
 1. Selects four points in the image in the Region of interest, whose top view is required:  
-	1. `python getRealOneGazebo.py ~/backup/d2-net/data_gazebo/data5/rgb/rgb000318.jpg ~/backup/d2-net/data_gazebo/data5/depth/depth000318.npy`  
+	1. `python getRealOneGazebo.py --rgb 'data/drone1/rgb/rgb000540.jpg' --depth 'data/drone1/depth/depth000540.npy' --camera_file configs/camera_gazebo_drone.txt`   
 
 ### Caculating transformation  
 1. Inferring on gazebo dataset in orthographic view:    
@@ -19,12 +19,18 @@
 2. Converting RoRD transformations (in camera frame and in left handed system) to loop closure transformations (in odom frame and in right handed system):  
 	1. Getting static transform from ros, `Tbase_camera` or `Camera wrt Base link`
 		1. `rosrun tf tf_echo base_link camera_link`    
-	2. `python cordTrans.py --static_trans ../configs/camWrtBase.txt --rord_trans ../demo/transLC.npy`  
+	2. Transformations for SE2 and SE3:  
+		1. `python cordTrans.py --static_trans ../configs/camWrtBase.txt --rord_trans ../demo/transLC.npy`  
+		2. `python cordTrans.py --static_trans ../configs/camWrtBaseDrone.txt --rord_trans ../data/drone1/transLC212_2275.npy --se3`   
+
 	3. Derivation of how transformations in [`cordTrans.py`](pose_graph/cordTrans.py) are dervied can be found [here](https://drive.google.com/file/d/1UfLmfj4JtnokyQDI0k9mx3KbO0Xsvegk/view?usp=sharing).  
 
 ### Optimizing pose graph  
 1. `cd pose_graph`  
 2. Generating odometry edges `noise.g2o` using gazebo's odometer output `poses.txt`.  
-	1. `python genG2o.py data5/poses.txt`  
+	1. SE2 Optimization:  
+		1. `python genG2o.py data5/poses.txt`  
+	2. SE3 Optimization:  
+		1. `python genG2oSE3.py drone1/poses.txt`    
 3. Adding loop closure edges `loop_pairs.txt` to generated odometry edges `noise.g2o` to output `noise_lc.g2o`. Also optimizing odometry and loop closure edges stored in `noise_lc.g2o` to output `opt.g2o`.  
 	1. `python optimizePose.py data5/noise.g2o data5/loop_pairs.txt`  

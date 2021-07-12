@@ -7,6 +7,39 @@ import copy
 import cv2
 import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
+import argparse
+
+
+parser = argparse.ArgumentParser(description='Generating orthographic view for feature matching from perspective image.', 
+	formatter_class=argparse.RawTextHelpFormatter)
+
+parser.add_argument(
+	'--rgb', type=str, help='path to the rgb image'
+)
+
+parser.add_argument(
+	'--depth', type=str, help='path to the depth image'
+)
+
+parser.add_argument(
+	'--camera_file', type=str, default='../configs/camera.txt',
+	help='path to the camera intrinsics file. In order: focal_x, focal_y, center_x, center_y, scaling_factor.'
+)
+
+args = parser.parse_args()
+
+
+def readCamera(camera):
+	with open (camera, "rt") as file:
+		contents = file.read().split()
+
+	focalX = float(contents[0])
+	focalY = float(contents[1])
+	centerX = float(contents[2])
+	centerY = float(contents[3])
+	scalingFactor = float(contents[4])
+
+	return focalX, focalY, centerX, centerY, scalingFactor
 
 
 def display(pcd, T=np.identity(4)):
@@ -28,8 +61,8 @@ def getPointCloud(rgbFile, depthFile):
 	pts = [(x_c[0], y_c[0]), (x_c[1], y_c[1]), (x_c[2], y_c[2]), (x_c[3], y_c[3])]
 	poly = Polygon(pts)
 
-	thresh = 5.6
-	# thresh = 15.0
+	# thresh = 5.6
+	thresh = 15.0
 
 	depth = np.load(depthFile)
 	rgb = Image.open(rgbFile)
@@ -227,8 +260,8 @@ def click_event(event, x, y, flags, params):
 		cv2.imshow('image', img)
 
 if __name__ == '__main__':
-	rgbFile = argv[1]
-	depthFile = argv[2]
+	rgbFile = args.rgb
+	depthFile = args.depth
 
 	# Realsense D415
 	# focalX = 607.8118896484375
@@ -243,12 +276,14 @@ if __name__ == '__main__':
 	# centerY = 247.72047424316406
 
 	# Gazebo
-	focalX = 402.29
-	focalY = 402.29
-	centerX = 320.5
-	centerY = 240.5
+	# focalX = 402.29
+	# focalY = 402.29
+	# centerX = 320.5
+	# centerY = 240.5
 
-	scalingFactor = 1000.0
+	# scalingFactor = 1000.0
+
+	focalX, focalY, centerX, centerY, scalingFactor = readCamera(args.camera_file)
 
 	img = cv2.imread(rgbFile)
 	cv2.imshow('image', img)
@@ -260,4 +295,4 @@ if __name__ == '__main__':
 	warpImg, homographyMat = getTopImage(rgbFile, depthFile)
 
 	# cv2.imwrite('top1000img.png', warpImg)
-	np.save('topH2.npy', homographyMat)
+	np.save('/home/cair/Desktop/topH540.npy', homographyMat)

@@ -2,3 +2,4 @@ models/
 */__pycache__
 res/
 *.npy
+data/
