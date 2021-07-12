@@ -115,7 +115,8 @@ def addNoise(X, Y, Z, Qx, Qy, Qz, Qw):
 			# xNoise = np.random.normal(0, 0.08); yNoise = np.random.normal(0, 0.08); tNoise = np.random.normal(0, 0.002)
 			# xNoise = 0.005; yNoise = 0.005; tNoise = -0.0005
 			# xNoise = 0.01; yNoise = 0.01; tNoise = 0.0007
-			xNoise = 0; yNoise = 0; zNoise = 0; rollNoise = 0.00015; pitchNoise = 0.00015; yawNoise = 0.00015
+			# xNoise = 0; yNoise = 0; zNoise = 0; rollNoise = 0.00015; pitchNoise = 0.00015; yawNoise = 0.00015
+			xNoise = 0; yNoise = 0; zNoise = 0; rollNoise = 0.00025; pitchNoise = 0.00025; yawNoise = 0.00025
 
 		dx += xNoise; dy += yNoise; dz += zNoise
 		dyaw += yawNoise; dpitch += pitchNoise; droll += rollNoise
@@ -199,23 +200,23 @@ def writeG2O(X, Y, Z, Qx, Qy, Qz, Qw, file):
 	g2o.close()
 
 
-def readG2o(fileName):
-	f = open(fileName, 'r')
-	A = f.readlines()
-	f.close()
+# def readG2o(fileName):
+# 	f = open(fileName, 'r')
+# 	A = f.readlines()
+# 	f.close()
 
-	X = []
-	Y = []
-	THETA = []
+# 	X = []
+# 	Y = []
+# 	THETA = []
 
-	for line in A:
-		if "VERTEX_SE2" in line:
-			(ver, ind, x, y, theta) = line.split(' ')
-			X.append(float(x))
-			Y.append(float(y))
-			THETA.append(float(theta.rstrip('\n')))
+# 	for line in A:
+# 		if "VERTEX_SE2" in line:
+# 			(ver, ind, x, y, theta) = line.split(' ')
+# 			X.append(float(x))
+# 			Y.append(float(y))
+# 			THETA.append(float(theta.rstrip('\n')))
 
-	return (X, Y, THETA)
+# 	return (X, Y, THETA)
 
 
 if __name__ == '__main__':

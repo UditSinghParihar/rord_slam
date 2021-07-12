@@ -34,3 +34,4 @@
 		1. `python genG2oSE3.py drone1/poses.txt`    
 3. Adding loop closure edges `loop_pairs.txt` to generated odometry edges `noise.g2o` to output `noise_lc.g2o`. Also optimizing odometry and loop closure edges stored in `noise_lc.g2o` to output `opt.g2o`.  
 	1. `python optimizePose.py data5/noise.g2o data5/loop_pairs.txt`  
+	2. `python optimizePoseSE3.py drone1/noise.g2o drone1/loop_pairs.txt drone1/gt.g2o`  
