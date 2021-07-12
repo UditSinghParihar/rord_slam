@@ -20,8 +20,10 @@
 	1. Getting static transform from ros, `Tbase_camera` or `Camera wrt Base link`
 		1. `rosrun tf tf_echo base_link camera_link`    
 	2. Transformations for SE2 and SE3:  
-		1. `python cordTrans.py --static_trans ../configs/camWrtBase.txt --rord_trans ../demo/transLC.npy`  
-		2. `python cordTrans.py --static_trans ../configs/camWrtBaseDrone.txt --rord_trans ../data/drone1/transLC212_2275.npy --se3`   
+		1. SE2 Optimization:  
+			1. `python cordTrans.py --static_trans ../configs/camWrtBase.txt --rord_trans ../demo/transLC.npy`  
+		2. SE3 Optimization:  
+			1. `python cordTrans.py --static_trans ../configs/camWrtBaseDrone.txt --rord_trans ../data/drone1/transLC212_2275.npy --se3`   
 
 	3. Derivation of how transformations in [`cordTrans.py`](pose_graph/cordTrans.py) are dervied can be found [here](https://drive.google.com/file/d/1UfLmfj4JtnokyQDI0k9mx3KbO0Xsvegk/view?usp=sharing).  
 
@@ -33,5 +35,7 @@
 	2. SE3 Optimization:  
 		1. `python genG2oSE3.py drone1/poses.txt`    
 3. Adding loop closure edges `loop_pairs.txt` to generated odometry edges `noise.g2o` to output `noise_lc.g2o`. Also optimizing odometry and loop closure edges stored in `noise_lc.g2o` to output `opt.g2o`.  
-	1. `python optimizePose.py data5/noise.g2o data5/loop_pairs.txt`  
-	2. `python optimizePoseSE3.py drone1/noise.g2o drone1/loop_pairs.txt drone1/gt.g2o`  
+	1. SE2 Optimization:  
+		1. `python optimizePose.py data5/noise.g2o data5/loop_pairs.txt`  
+	2. SE3 Optimization:  
+		1. `python optimizePoseSE3.py drone1/noise.g2o drone1/loop_pairs.txt drone1/gt.g2o`  
